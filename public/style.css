@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body {
+    background-color: rgb(212, 212, 212);
+}
+
+.siteImages {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    widows: 500px;
+}
+.box {
+    padding: 10px;
+    box-shadow: -5px 30px 10px -24px rgba(0, 0, 0, 0.87);
+    background-color: white;
+    margin: 5px;
+}
+
+.border {
+    object-fit: contain;
+    height: 200px;
+    width: 300px;
+    border: black solid 1px;
+    overflow: hidden;
+}
+
+.border h4 {
+    margin: 15px;
+}
+
+@media screen and (max-width: 600px) {
+    .siteImages {
+        list-style: none;
+        /* display: flex; */
+        /* flex-direction: column; */
+        /* flex-wrap: wrap; */
+    }
+}
