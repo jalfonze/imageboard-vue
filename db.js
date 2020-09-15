@@ -5,7 +5,7 @@ const db = spicedPg("postgres:postgres:postgres@localhost:5432/images-db");
 module.exports.getImages = () => {
     return db.query(
         `
-        SELECT * FROM images;
+        SELECT * FROM images ORDER BY created_at DESC;
         `
     );
 };

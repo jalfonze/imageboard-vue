@@ -4,10 +4,10 @@ const db = require("./db");
 const multer = require("multer");
 const uidSafe = require("uid-safe");
 const path = require("path");
+const s3 = require("./s3");
+const { s3Url } = require("./config.json");
 
 app.use(express.static("./public"));
-app.use(express.static("./sql"));
-app.use(express.static("./uploads"));
 
 const diskStorage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -39,15 +39,15 @@ app.get("/images", (req, res) => {
         .catch((err) => console.log("ERROR IN get images", err));
 });
 
-app.post("/upload", uploader.single("file"), (req, res) => {
+app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     console.log("file: ", req.file);
     console.log("SUCESS UPLOAD", req.body);
     let { title, description, username } = req.body;
-    let { path } = req.file;
+    let { filename } = req.file;
+    let url = `${s3Url}${filename}`;
     if (req.file) {
         //db insert here for the info
-        console.log("FORTYNINE: ", path, username, title, description);
-        db.postImage(path, username, title, description);
+        db.postImage(url, username, title, description);
     } else {
         res.json({
             success: false,

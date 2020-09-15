@@ -40,7 +40,7 @@
                         console.log("response", response);
                     })
                     .catch(function (err) {
-                        console.log("err POST /uploads: ", err);
+                        console.log("error POST /uploads: ", err);
                     });
             },
             handleChange: function (e) {
