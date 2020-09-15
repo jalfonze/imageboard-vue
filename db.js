@@ -5,7 +5,7 @@ const db = spicedPg("postgres:postgres:postgres@localhost:5432/images-db");
 module.exports.getImages = () => {
     return db.query(
         `
-        SELECT * FROM images ORDER BY created_at DESC;
+        SELECT * FROM images;
         `
     );
 };
@@ -15,7 +15,7 @@ module.exports.postImage = (url, username, title, description) => {
         `
         INSERT INTO images (url, username, title, description)
         VALUES ($1, $2, $3, $4)
-        `,
+        RETURNING url, username,title, description`,
         [url, username, title, description]
     );
 };

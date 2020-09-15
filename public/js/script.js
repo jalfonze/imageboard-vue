@@ -37,7 +37,8 @@
                 axios
                     .post("/upload", formData)
                     .then(function (response) {
-                        console.log("response", response);
+                        console.log("SCRIPT RESPONSE", response);
+                        this.siteImages.unshift(response.data.newImage);
                     })
                     .catch(function (err) {
                         console.log("error POST /uploads: ", err);
