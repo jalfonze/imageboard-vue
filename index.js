@@ -9,6 +9,9 @@ const { s3Url } = require("./config.json");
 
 app.use(express.static("./public"));
 
+app.use(express.json()); //parses a giant string from axios to object.
+//extremely important for client side server side connection
+
 const diskStorage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, __dirname + "/uploads");
@@ -27,10 +30,20 @@ const uploader = multer({
     },
 });
 
+app.get("/info/:num", (req, res) => {
+    // console.log("REQ.BODY", req.params.num);
+    db.getInfo(req.params.num)
+        .then((resultsInfo) => {
+            // console.log(resultsInfo);
+            res.json(resultsInfo);
+        })
+        .catch((err) => console.log("ERR IN GET INFO", err));
+});
+
 app.get("/images", (req, res) => {
     db.getImages()
         .then((images) => {
-            console.log(images.rows);
+            // console.log(images.rows);
             let image = images.rows;
             res.json({
                 image,
@@ -57,6 +70,29 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
             success: false,
         });
     }
+});
+
+app.post("/postComments", (req, res) => {
+    console.log("COMMENT SUCCESS", req.body);
+    // console.log("COMMENT SUCCESS", req.body["Comment by"], req.body.Comment);
+    let { commentBy, comment, imgId } = req.body;
+    db.postComment(commentBy, comment, imgId)
+        .then((results) => {
+            // console.log(results.rows[0]);
+            let commentInfo = results.rows[0];
+            res.json({
+                commentInfo,
+            });
+        })
+        .catch((err) => console.log("ERROR IN POST COMMENT", err));
+});
+
+app.get("/getComments/:num", (req, res) => {
+    db.getComment(req.params.num).then((results) => {
+        console.log("RESUULTS: ", results.rows);
+        let getCommentInfo = results.rows;
+        res.json({ getCommentInfo });
+    });
 });
 
 app.listen(8080, () => console.log("vue server is listening ..."));

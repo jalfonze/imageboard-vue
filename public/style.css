@@ -5,12 +5,58 @@
 
 body {
     background-color: rgb(212, 212, 212);
+    font-family: monospace;
+}
+
+.h1div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+button {
+    background: linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+    background-color: #ededed;
+    border-radius: 42px;
+    border: 2px solid #dcdcdc;
+    display: inline-block;
+    cursor: pointer;
+    color: #777777;
+    font-family: Arial;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 7px 32px;
+    text-decoration: none;
+}
+button:hover {
+    background: linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+    background-color: #dfdfdf;
+}
+
+h1 {
+    width: 80%;
+}
+
+.form-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 10px;
+    flex-direction: column;
+}
+
+.form-div p {
+    padding: 5px;
 }
 
 .siteImages {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     widows: 500px;
 }
 .box {
@@ -20,9 +66,13 @@ body {
     margin: 5px;
 }
 
+.border:hover {
+    cursor: pointer;
+}
+
 .border {
     object-fit: contain;
-    height: 200px;
+    height: 250px;
     width: 300px;
     border: black solid 1px;
     overflow: hidden;
@@ -30,6 +80,26 @@ body {
 
 .border h4 {
     margin: 15px;
+}
+
+.modal {
+    position: fixed;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    color: red;
+    flex-direction: column;
+    height: 500px;
+    width: 500px;
+    overflow: hidden;
+}
+
+.closeBtn:hover {
+    cursor: pointer;
+}
+
+.modal button {
+    transform: scale(0.6);
 }
 
 @media screen and (max-width: 600px) {
