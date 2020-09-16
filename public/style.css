@@ -82,16 +82,24 @@ h1 {
     margin: 15px;
 }
 
+.modalParent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 .modal {
+    top: 50px;
     position: fixed;
     background-color: white;
     display: flex;
     align-items: center;
     color: red;
     flex-direction: column;
-    height: 500px;
-    width: 500px;
-    overflow: hidden;
+    height: 700px;
+    width: 800px;
+    overflow: scroll;
 }
 
 .closeBtn:hover {
@@ -102,11 +110,21 @@ h1 {
     transform: scale(0.6);
 }
 
+.formTwo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 @media screen and (max-width: 600px) {
     .siteImages {
         list-style: none;
         /* display: flex; */
         /* flex-direction: column; */
         /* flex-wrap: wrap; */
+    }
+    .modal {
+        width: 600px;
     }
 }

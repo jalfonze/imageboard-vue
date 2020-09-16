@@ -9,7 +9,7 @@
         <h1>Welcome to Snakestagram! Upload a picture of your favourite snake!</h1>
     </div>
     <main>
-        <component-one v-on:turn-off="showModal = false" :photo-id="photoId" v-if="showModal"></component-one>
+       
         <form>
             <div class="form-div">
                 <p>Type of snake</p>
@@ -24,6 +24,8 @@
                 <button @click="handleClick">Upload</button>
             </div>
             </form>
+
+            <component-one v-on:turn-off="showModal = false" :photo-id="photoId" v-if="showModal"></component-one>
 
         <div class="siteImages" v-if="siteImages.length > 0">
             <div class="box" v-for="image in siteImages"> 
@@ -40,27 +42,27 @@
 
     <script id="component-one" type="text/x-template">
         <!-- everything goes inside that div. rule number one for components -->
-    <div class="modal"> 
-        <img src="" alt="">
-        <h1 class="closeBtn" @click="closeModal">X</h1>
-        <p>Type of Snake: {{head}}</p>
-        <p>Description: {{desc}}</p>
-        <p>Uploaded by: {{user}}</p>
-        <img :src="url" alt="img small" width="200px">
-        <form>
-            <div class="formTwo" >
-                <p>Your Name</p>
-                <input v-model="nameOfUser" type="text" name="nameOfUser" placeholder="Your Name">
-                <p>Add a comment here, keep your snake jokes clean</p>
-                <textarea v-model="comments" name="comments" id="txtarea" cols="30" rows="5" placeholder="What do you think aobut this snake?"></textarea>
-                <p>Add comment</p>
-                <button @click="photoSubmit">Submit</button>
+    <div class="modalParent">
+        <div class="modal"> 
+            <img src="" alt="">
+            <h1 class="closeBtn" @click="closeModal">X</h1>
+            <p>Description: {{desc}}</p>
+            <img :src="url" alt="img small">
+            <form>
+                <div class="formTwo" >
+                    <p>Your Name</p>
+                    <input v-model="nameOfUser" type="text" name="nameOfUser" placeholder="Your Name">
+                    <p>Add a comment here, keep your snake jokes clean</p>
+                    <textarea v-model="comments" name="comments" id="txtarea" cols="30" rows="5" placeholder="What do you think aobut this snake?"></textarea>
+                    <p>Add comment</p>
+                    <button @click="photoSubmit">Submit</button>
+                </div>
+            </form>
+            <div class="comment-box" v-for="comment in modalComments">
+                <h4>Comment By: {{comment.usercom}}</h4>
+                <h5 class="commentSection">{{comment.comment}}</h5>
+                <p>{{comment.created_at}}</p>
             </div>
-        </form>
-        <div class="comment-box" v-for="comment in modalComments">
-            <h4>Comment By: {{comment.usercom}}</h4>
-            <h5 class="commentSection">{{comment.comment}}</h5>
-            <p>{{comment.created_at}}</p>
         </div>
     </div>
     </script>
