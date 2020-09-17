@@ -23,6 +23,7 @@
             console.log("this id", this.photoId);
             let takeThis = this;
             var pic = this.photoId;
+
             axios
                 .get("/info/" + pic)
                 .then(function (response) {
@@ -80,15 +81,16 @@
             description: "",
             username: "",
             file: null,
-            showModal: false,
+            imageId: null,
             photoId: null,
         },
         mounted: function () {
+            this.scroll();
             var takeThis = this;
             axios
                 .get("/images")
                 .then(function (response) {
-                    // console.log(takeThis, response);
+                    console.log("MODALSHOWRESPONSE", takeThis, response);
                     takeThis.siteImages = response.data.image;
                 })
                 .catch(function (err) {
@@ -129,7 +131,7 @@
 
             photoClick: function (id) {
                 console.log("photocloiiick");
-                this.showModal = true;
+                this.imageId = this.photoId;
                 console.log("PHOTO ID: ", id);
                 this.photoId = id;
             },
@@ -148,6 +150,17 @@
                         takeThis.siteImages.push(...newImages);
                     })
                     .catch((err) => console.log("ERROR IN MORE PHOTOS", err));
+            },
+            scroll() {
+                window.onscroll = function () {
+                    if (
+                        document.documentElement.scrollTop +
+                            window.innerHeight ===
+                        document.documentElement.offSetHeight
+                    ) {
+                        console.log("ayo");
+                    }
+                };
             },
         },
     });

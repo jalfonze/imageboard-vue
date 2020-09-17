@@ -25,7 +25,11 @@
             </div>
             </form>
 
-            <component-one v-on:turn-off="showModal = false" :photo-id="photoId" v-if="showModal"></component-one>
+        <!-- VUE COMPONENT -->
+
+            <component-one v-on:turn-off="imageId = null" :photo-id="photoId" v-if="imageId"></component-one>
+
+<!-- IMAGES -->
 
         <div class="siteImages" v-if="siteImages.length > 0">
             <div class="box" v-for="image in siteImages"> 
