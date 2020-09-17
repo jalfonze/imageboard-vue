@@ -27,16 +27,19 @@
 
         <!-- VUE COMPONENT -->
 
-            <component-one v-on:turn-off="imageId = null" :photo-id="photoId" v-if="imageId"></component-one>
+            <component-one v-on:turn-off="photoId = null" :photo-id="photoId" v-if="photoId"></component-one>
 
 <!-- IMAGES -->
 
         <div class="siteImages" v-if="siteImages.length > 0">
             <div class="box" v-for="image in siteImages"> 
-                <div @click="photoClick(image.id)" class="border">
-                <h4>{{image.title}}</h4>
-                <p>Uploaded by: {{image.username}}</p>
-                    <img class="snakePics" :src="image.url" alt="images" width="300px" >
+                <div class="border">
+                    <!-- adds hash and image.id to url -->
+                    <a :href=" '#' + image.id ">
+                        <h4>{{image.title}}</h4>
+                        <p>Uploaded by: {{image.username}}</p>
+                            <img class="snakePics" :src="image.url" alt="images" width="300px" >
+                    </a>
                 </div>
             </div>
         </div>

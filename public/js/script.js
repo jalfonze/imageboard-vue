@@ -20,7 +20,7 @@
             };
         },
         mounted: function () {
-            console.log("this id", this.photoId);
+            console.log("this id", this);
             let takeThis = this;
             var pic = this.photoId;
 
@@ -81,21 +81,55 @@
             description: "",
             username: "",
             file: null,
-            imageId: null,
-            photoId: null,
+            photoId: location.hash.slice(1),
         },
         mounted: function () {
-            this.scroll();
             var takeThis = this;
             axios
                 .get("/images")
                 .then(function (response) {
                     console.log("MODALSHOWRESPONSE", takeThis, response);
                     takeThis.siteImages = response.data.image;
+                    takeThis.scroll();
                 })
                 .catch(function (err) {
                     console.log("ERROR IN GET", err);
                 });
+
+            window.addEventListener("hashchange", function () {
+                console.log("HASHWORKS", location.hash);
+                takeThis.photoId = location.hash.slice(1);
+            });
+        },
+        watch: {
+            photoId: function () {
+                //do mounted function does
+                //when url is changed the image and info inside updates
+                console.log(location.hash.slice(1));
+
+                let takeThis = this;
+                var pic = this.photoId;
+
+                axios
+                    .get("/info/" + pic)
+                    .then(function (response) {
+                        console.log("COMPONENT RESPONSE", response.data.rows);
+                        takeThis.head = response.data.rows[0].title;
+                        takeThis.desc = response.data.rows[0].description;
+                        takeThis.user = response.data.rows[0].username;
+                        takeThis.url = response.data.rows[0].url;
+                        takeThis.id = response.data.rows[0].photoId;
+                    })
+                    .catch((err) => console.log("ERR IN axios get!", err));
+
+                axios.get("/getComments/" + pic).then(function (response) {
+                    console.log(
+                        "COMPONENT RESPONSE TWO",
+                        response.data.getCommentInfo
+                    );
+                    takeThis.modalComments = response.data.getCommentInfo;
+                });
+            },
         },
 
         //lifecyycle method // mouted function runs after the HTML has been rendered // render data from database the moment page loads // mounted is the answer // function only runs once! when the page loads, // need to refresh page if you want to run mountd again
@@ -129,12 +163,6 @@
                 this.file = e.target.files[0];
             },
 
-            photoClick: function (id) {
-                console.log("photocloiiick");
-                this.imageId = this.photoId;
-                console.log("PHOTO ID: ", id);
-                this.photoId = id;
-            },
             clickMore: function () {
                 console.log("MORE MROE MORE ");
                 console.log(this.siteImages.slice().pop());
@@ -151,14 +179,30 @@
                     })
                     .catch((err) => console.log("ERROR IN MORE PHOTOS", err));
             },
-            scroll() {
+            scroll: function () {
+                let takeThis = this;
                 window.onscroll = function () {
+                    console.log("scrolling");
                     if (
                         document.documentElement.scrollTop +
-                            window.innerHeight ===
-                        document.documentElement.offSetHeight
+                            window.innerHeight >=
+                        document.documentElement.offsetHeight - 600
                     ) {
                         console.log("ayo");
+                        let lastImageId = takeThis.siteImages.slice().pop().id;
+
+                        setTimeout(function () {
+                            axios
+                                .get("/morePhotos/" + lastImageId)
+                                .then(function (imageResults) {
+                                    console.log(imageResults.data.result);
+                                    let newImages = imageResults.data.result;
+                                    takeThis.siteImages.push(...newImages);
+                                })
+                                .catch((err) =>
+                                    console.log("ERROR IN MORE PHOTOS", err)
+                                );
+                        }, 2000);
                     }
                 };
             },

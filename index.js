@@ -60,11 +60,13 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     let url = `${s3Url}${filename}`;
     if (req.file) {
         //db insert here for the info
-        db.postImage(url, username, title, description).then((newImg) => {
-            console.log("NEW IMAGE:", newImg.rows[0]);
-            let newImage = newImg.rows[0];
-            res.json({ newImage });
-        });
+        db.postImage(url, username, title, description)
+            .then((newImg) => {
+                console.log("NEW IMAGE:", newImg.rows[0]);
+                let newImage = newImg.rows[0];
+                res.json({ newImage });
+            })
+            .catch((err) => console.log("ERROR IN POST IMAGE", err));
     } else {
         res.json({
             success: false,
@@ -88,11 +90,13 @@ app.post("/postComments", (req, res) => {
 });
 
 app.get("/getComments/:num", (req, res) => {
-    db.getComment(req.params.num).then((results) => {
-        console.log("RESUULTS: ", results.rows);
-        let getCommentInfo = results.rows;
-        res.json({ getCommentInfo });
-    });
+    db.getComment(req.params.num)
+        .then((results) => {
+            console.log("RESUULTS: ", results.rows);
+            let getCommentInfo = results.rows;
+            res.json({ getCommentInfo });
+        })
+        .catch((err) => console.log("ERROR IN GET COMMENT", err));
 });
 
 app.get("/morePhotos/:num", (req, res) => {
