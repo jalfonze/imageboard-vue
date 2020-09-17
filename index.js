@@ -34,7 +34,7 @@ app.get("/info/:num", (req, res) => {
     // console.log("REQ.BODY", req.params.num);
     db.getInfo(req.params.num)
         .then((resultsInfo) => {
-            // console.log(resultsInfo);
+            console.log(resultsInfo);
             res.json(resultsInfo);
         })
         .catch((err) => console.log("ERR IN GET INFO", err));
@@ -92,6 +92,13 @@ app.get("/getComments/:num", (req, res) => {
         console.log("RESUULTS: ", results.rows);
         let getCommentInfo = results.rows;
         res.json({ getCommentInfo });
+    });
+});
+
+app.get("/morePhotos/:num", (req, res) => {
+    db.getMoreImages(req.params.num).then((result) => {
+        console.log(result);
+        res.json({ result });
     });
 });
 

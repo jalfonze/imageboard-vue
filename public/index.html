@@ -32,11 +32,15 @@
                 <div @click="photoClick(image.id)" class="border">
                 <h4>{{image.title}}</h4>
                 <p>Uploaded by: {{image.username}}</p>
-                    <img :src="image.url" alt="images" width="300px" >
+                    <img class="snakePics" :src="image.url" alt="images" width="300px" >
                 </div>
             </div>
         </div>
-        
+
+        <div class="moreBtn">
+            <button @click="clickMore">More</button>
+
+        </div>
 
     </main>
 

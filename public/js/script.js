@@ -133,9 +133,22 @@
                 console.log("PHOTO ID: ", id);
                 this.photoId = id;
             },
-            // closeModal: function () {
-            //     this.showModal = false;
-            // },
+            clickMore: function () {
+                console.log("MORE MROE MORE ");
+                console.log(this.siteImages.slice().pop());
+                let lastImageId = this.siteImages.slice().pop().id;
+                console.log(lastImageId);
+                let takeThis = this;
+
+                axios
+                    .get("/morePhotos/" + lastImageId)
+                    .then(function (imageResults) {
+                        console.log(imageResults.data.result);
+                        let newImages = imageResults.data.result;
+                        takeThis.siteImages.push(...newImages);
+                    })
+                    .catch((err) => console.log("ERROR IN MORE PHOTOS", err));
+            },
         },
     });
 })();
