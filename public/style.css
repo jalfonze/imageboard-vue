@@ -57,13 +57,17 @@ h1 {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    widows: 500px;
 }
 .box {
     padding: 10px;
     box-shadow: -5px 30px 10px -24px rgba(0, 0, 0, 0.87);
     background-color: white;
     margin: 5px;
+}
+
+.siteImages a {
+    text-decoration: none;
+    color: black;
 }
 
 .border:hover {
