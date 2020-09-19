@@ -2,6 +2,66 @@
     // no es6, no let, no const, no destructuring
     // using promises
 
+    Vue.component("component-two", {
+        template: "#component-two",
+        props: ["commentId", "comArr"],
+        data: function () {
+            return {
+                commentReplies: [],
+                commentInfo: [],
+                replies: "",
+            };
+        },
+
+        mounted: function () {
+            console.log("COMPTWO!", this);
+            var takeThis = this;
+            console.log(this.commentId);
+            axios.get("/replies/" + this.commentId).then(function (results) {
+                console.log("REPLIES: ", results.data.replies[0]);
+                takeThis.commentInfo = results.data.replies[0];
+                console.log(takeThis.commentInfo);
+            });
+            axios
+                .get("/getAllReplies/" + this.commentId)
+                .then(function (results) {
+                    console.log(results.data.allReplies);
+                    takeThis.commentReplies = results.data.allReplies;
+                })
+                .catch(function (err) {
+                    console.log("ERROR IN GET ALL REP", err);
+                });
+        },
+        methods: {
+            closeComments: function () {
+                this.$emit("turn-off");
+            },
+            replySubmit: function (e) {
+                e.preventDefault();
+                var takeThis = this;
+                console.log(this.replies);
+                var reply = {
+                    comment: this.replies,
+                    id: this.commentId,
+                };
+                console.log(reply);
+
+                axios
+                    .post("/postReply", reply)
+                    .then(function (results) {
+                        console.log(results.data.replies);
+                        takeThis.commentReplies.unshift(
+                            results.data.replies[0]
+                        );
+                        console.log(takeThis.commentReplies);
+                    })
+                    .catch(function (err) {
+                        console.log("ERR IN POST REPLY", err);
+                    });
+            },
+        },
+    });
+
     Vue.component("component-one", {
         template: "#component-one",
         props: ["photoId"], //always array value
@@ -21,6 +81,7 @@
         mounted: function () {
             console.log("this id", this);
             this.getModal();
+            this.shareComs;
         },
 
         watch: {
@@ -31,6 +92,7 @@
                 this.getModal();
             },
         },
+
         methods: {
             photoSubmit: function (e) {
                 e.preventDefault();
@@ -85,6 +147,7 @@
                     takeThis.modalComments = response.data.getCommentInfo;
                 });
             },
+
             deleteImg: function () {
                 var id = {
                     id: this.photoId,
@@ -102,6 +165,11 @@
                 this.$emit("delete", this.photoId);
                 this.closeModal();
             },
+            getComId: function (id) {
+                console.log("COMMENTID", id);
+                this.$emit("com-id", id);
+            },
+
             clearCommentInput: function () {
                 (this.nameOfUser = ""), (this.comments = "");
             },
@@ -117,11 +185,13 @@
         data: {
             //props, pivotal way of working in framework, way to pass data from parent to child
             siteImages: [],
+            comArr: [],
             title: "",
             description: "",
             username: "",
             file: null,
             photoId: location.hash.slice(1),
+            commentId: null,
         },
         mounted: function () {
             var takeThis = this;
@@ -193,6 +263,17 @@
                     (this.description = ""),
                     (this.username = ""),
                     (this.file = null);
+            },
+
+            getCommentId: function (id) {
+                this.commentId = id;
+                console.log("COMMENT ID INSTANCE:", this.commentId);
+            },
+
+            shareComments: function (arr) {
+                console.log(arr);
+                this.comArr = arr;
+                console.log(this.comArr);
             },
 
             blink: function () {

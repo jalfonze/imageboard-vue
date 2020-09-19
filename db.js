@@ -50,7 +50,7 @@ module.exports.postComment = (usercom, comment, id) => {
         `
         INSERT INTO comments (usercom, comment, image_id)
         VALUES ($1, $2, $3)
-        RETURNING usercom, comment, created_at
+        RETURNING usercom, comment, created_at, id
         `,
         [usercom, comment, id]
     );
@@ -82,11 +82,43 @@ module.exports.getMoreImages = (lastId) => {
 };
 
 module.exports.deleteImg = (id) => {
-    console.log("DB", id);
     return db.query(
         `
         DELETE FROM images
         WHERE id = ($1)
+        `,
+        [id]
+    );
+};
+
+module.exports.getReplies = (id) => {
+    return db.query(
+        `
+        SELECT * FROM comments
+        WHERE id = ($1)
+        `,
+        [id]
+    );
+};
+
+module.exports.postReplies = (reply, id) => {
+    return db.query(
+        `
+        INSERT INTO replies (comment, reply_id)
+        VALUES ($1, $2)
+        RETURNING comment, reply_id, created_at
+        `,
+        [reply, id]
+    );
+};
+
+module.exports.getAllReplies = (id) => {
+    console.log("117DB", id);
+    return db.query(
+        `
+        SELECT * FROM replies
+        WHERE reply_id = ($1)
+        ORDER BY created_at DESC
         `,
         [id]
     );

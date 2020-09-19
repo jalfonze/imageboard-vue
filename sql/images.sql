@@ -18,3 +18,15 @@ CREATE TABLE comments(
     image_id INT NOT NULL REFERENCES images(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+DROP TABLE IF EXISTS replies CASCADE;
+
+CREATE TABLE replies(
+    id SERIAL PRIMARY KEY,
+    comment VARCHAR NOT NULL,
+    reply_id INT NOT NULL REFERENCES comments(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+

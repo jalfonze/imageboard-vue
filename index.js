@@ -117,4 +117,31 @@ app.post("/deleteImg", (req, res) => {
     });
 });
 
+app.get("/replies/:num", (req, res) => {
+    console.log(req.params.num);
+    db.getReplies(req.params.num).then((results) => {
+        console.log("SERVER REPLIES: ", results.rows);
+        let replies = results.rows;
+        res.json({ replies });
+    });
+});
+
+app.post("/postReply", (req, res) => {
+    console.log(req.body);
+    db.postReplies(req.body.comment, req.body.id).then((results) => {
+        console.log(results.rows);
+        let replies = results.rows;
+        res.json({ replies });
+    });
+});
+
+app.get("/getAllReplies/:num", (req, res) => {
+    console.log(req.params.num);
+    db.getAllReplies(req.params.num).then((results) => {
+        console.log("140:", results.rows);
+        let allReplies = results.rows;
+        res.json({ allReplies });
+    });
+});
+
 app.listen(8080, () => console.log("vue server is listening ..."));

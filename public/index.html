@@ -32,8 +32,13 @@
             </form>
 
         <!-- VUE COMPONENT -->
+        
+            <component-two v-on:turn-off="commentId = null" :comment-id="commentId" v-if="commentId" :com-arr="comArr" v-if="comArr"
+            ></component-two>
 
-            <component-one v-on:turn-off="photoId = null" :photo-id="photoId" v-if="photoId" @delete="removeImg"></component-one>
+            <component-one v-on:turn-off="photoId = null" :photo-id="photoId" @com-id="getCommentId" v-if="photoId" @delete="removeImg" @share-com="shareComments"
+            ></component-one>
+
 
 <!-- IMAGES -->
 
@@ -58,6 +63,25 @@
 
 
     <!-- MODAL WINDOW -->
+        <script id="component-two" type="text/x-template">
+            <div class="modalParent">
+                <div class="commentModal">
+                    <h3 @click="closeComments" >close</h3>
+                    <h3>currently under construction</h3>
+                    <h1>{{commentInfo.comment}}</h1>
+                    <form method="POST">
+                        <input v-model="replies" type="text" name="replies" placeholder="Reply to comment">
+                        <button @click="replySubmit">Send</button>
+                    </form>
+                    <div v-for="replies in commentReplies" class="replyBox">
+                        <h1>
+                            {{replies.comment}}
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </script>
+
     <script id="component-one" type="text/x-template">
         <!-- everything goes inside that div. rule number one for components -->
         <div class="modal"> 
@@ -78,7 +102,7 @@
             </div>
 
             <div class="formTwo" >
-            <form>
+                <form>
                     <input v-model="nameOfUser" type="text" name="nameOfUser" placeholder="Your Name" required>
                     <input v-model="comments" name="comments" id="txtarea" placeholder="What do you think about this snake?">
                     
@@ -89,11 +113,12 @@
                         <h4>By: {{comment.usercom}}</h4>
                         <p>{{comment.created_at}}</p>
                     </div>
-                    <h2 class="commentSection">{{comment.comment}}</h2>
+                    <h2 @click="getComId(comment.id)" class="commentSection">{{comment.comment}}</h2>
                     <div class="linebreak"></div>
                 </div>
             </div>
         </div>
+        
     </script>
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
