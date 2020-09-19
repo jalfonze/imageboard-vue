@@ -1,33 +1,39 @@
 <!doctype html>
 <html>
 <head>
+    <script
+            src="https://kit.fontawesome.com/dfd9822610.js"
+            crossorigin="anonymous"
+        ></script>
     <title>IMAGES</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="h1div">
-        <h1>Welcome to Snakestagram! Upload a picture of your favourite snake!</h1>
-    </div>
+
     <main>
+        <div class="coverPhoto">
+            <h1 class="title">Welcome to Snakestagram! Upload a picture of your favourite snake!</h1>
+            <img :src="siteImages[0].url" alt="cover-photo">
+        </div>
+        <!-- <div class="h1div">
+            <h1>Welcome to Snakestagram! Upload a picture of your favourite snake!</h1>
+        </div> -->
        
         <form>
             <div class="form-div">
-                <p>Type of snake</p>
                 <input v-model="title" type="text" name="title" placeholder="Type">
-                <p>Description</p>
                 <input v-model="description" type="text" name="decription" placeholder="Description">
-                <p>Your Name</p>
                 <input v-model="username" type="text" name="username" placeholder="Your Name">
-                <p>Choose an image! Please keep it under 1280px x 960</p>
-                <input @change="handleChange" type="file" name="file" accept="image/*">
-                <p>Upload your image</p>
-                <button @click="handleClick">Upload</button>
+                <input class="fileInput" @change="handleChange" type="file" name="file" id="file" accept="image/*">
+                <label class="chooseBtn" for="file">
+                    Choose a photo</label>
+                <button id="uploadPhotoBtn" @click="handleClick">Upload</button>
             </div>
             </form>
 
         <!-- VUE COMPONENT -->
 
-            <component-one v-on:turn-off="photoId = null" :photo-id="photoId" v-if="photoId"></component-one>
+            <component-one v-on:turn-off="photoId = null" :photo-id="photoId" v-if="photoId" @delete="removeImg"></component-one>
 
 <!-- IMAGES -->
 
@@ -36,9 +42,9 @@
                 <div class="border">
                     <!-- adds hash and image.id to url -->
                     <a :href=" '#' + image.id ">
-                        <h4>{{image.title}}</h4>
-                        <p>Uploaded by: {{image.username}}</p>
-                            <img class="snakePics" :src="image.url" alt="images" width="300px" >
+                        <!-- <h4>{{image.title}}</h4> -->
+                        <!-- <p>Uploaded by: {{image.username}}</p> -->
+                            <img class="snakePics" :src="image.url" alt="images" width="600px" >
                     </a>
                 </div>
             </div>
@@ -46,36 +52,48 @@
 
         <!-- <div class="moreBtn">
             <button @click="clickMore">More</button>
-
         </div> -->
 
     </main>
 
+
+    <!-- MODAL WINDOW -->
     <script id="component-one" type="text/x-template">
         <!-- everything goes inside that div. rule number one for components -->
-    <div class="modalParent">
         <div class="modal"> 
-            <img src="" alt="">
-            <h1 class="closeBtn" @click="closeModal">X</h1>
-            <p>Description: {{desc}}</p>
-            <img :src="url" alt="img small">
+            <div class="modalPhotoParent">
+                <h3 class="closeBtn" @click="closeModal">Close</h3>
+                    <div class="modalPhoto">
+                            <a v-if="buttonInfo.next !== null" :href=" '#' + buttonInfo.next"><i class="fas fa-angle-left leftArrow"></i>
+                            </a>
+                            <a v-if="buttonInfo.prev !== null" :href=" '#' + buttonInfo.prev"><i class="fas fa-angle-right rightArrow"></i></a>
+                        <img :src="url" alt="img small">
+                    </div>
+                    <div class="photoInfo">
+                        <h3>{{head}}</h3>
+                        <h4>{{desc}}</h4>
+                        <h5>Uploaded by: {{user}}</h5>
+                        <button @click="deleteImg">Delete</button>
+                    </div>
+            </div>
+
+            <div class="formTwo" >
             <form>
-                <div class="formTwo" >
-                    <p>Your Name</p>
-                    <input v-model="nameOfUser" type="text" name="nameOfUser" placeholder="Your Name">
-                    <p>Add a comment here, keep your snake jokes clean</p>
-                    <textarea v-model="comments" name="comments" id="txtarea" cols="30" rows="5" placeholder="What do you think aobut this snake?"></textarea>
-                    <p>Add comment</p>
+                    <input v-model="nameOfUser" type="text" name="nameOfUser" placeholder="Your Name" required>
+                    <input v-model="comments" name="comments" id="txtarea" placeholder="What do you think about this snake?">
+                    
                     <button @click="photoSubmit">Submit</button>
+                </form>
+                <div class="comment-box" v-for="comment in modalComments">
+                    <div>
+                        <h4>By: {{comment.usercom}}</h4>
+                        <p>{{comment.created_at}}</p>
+                    </div>
+                    <h2 class="commentSection">{{comment.comment}}</h2>
+                    <div class="linebreak"></div>
                 </div>
-            </form>
-            <div class="comment-box" v-for="comment in modalComments">
-                <h4>Comment By: {{comment.usercom}}</h4>
-                <h5 class="commentSection">{{comment.comment}}</h5>
-                <p>{{comment.created_at}}</p>
             </div>
         </div>
-    </div>
     </script>
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>

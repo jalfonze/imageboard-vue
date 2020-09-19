@@ -18,7 +18,7 @@ module.exports.postImage = (url, username, title, description) => {
         `
         INSERT INTO images (url, username, title, description)
         VALUES ($1, $2, $3, $4)
-        RETURNING url, username,title, description`,
+        RETURNING url, username,title, description, id`,
         [url, username, title, description]
     );
 };
@@ -26,8 +26,20 @@ module.exports.postImage = (url, username, title, description) => {
 module.exports.getInfo = (id) => {
     return db.query(
         `
-        SELECT * FROM images
-        WHERE id = ($1)
+        SELECT *
+        , (SELECT id 
+            FROM images
+            WHERE id > ($1) 
+            ORDER BY id ASC
+            LIMIT 1) AS next 
+        , (SELECT id 
+            FROM images
+            WHERE id < ($1) 
+            ORDER BY id DESC
+            LIMIT 1) AS prev 
+        FROM images
+        WHERE id = ($1) 
+
         `,
         [id]
     );
@@ -67,4 +79,15 @@ module.exports.getMoreImages = (lastId) => {
             [lastId]
         )
         .then(({ rows }) => rows);
+};
+
+module.exports.deleteImg = (id) => {
+    console.log("DB", id);
+    return db.query(
+        `
+        DELETE FROM images
+        WHERE id = ($1)
+        `,
+        [id]
+    );
 };
