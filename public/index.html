@@ -66,17 +66,19 @@
         <script id="component-two" type="text/x-template">
             <div class="modalParent">
                 <div class="commentModal">
-                    <h3 @click="closeComments" >close</h3>
-                    <h3>currently under construction</h3>
+                    <h3 class="com-close" @click="closeComments" >close</h3>
                     <h1>{{commentInfo.comment}}</h1>
                     <form method="POST">
                         <input v-model="replies" type="text" name="replies" placeholder="Reply to comment">
                         <button @click="replySubmit">Send</button>
                     </form>
-                    <div v-for="replies in commentReplies" class="replyBox">
-                        <h1>
-                            {{replies.comment}}
-                        </h1>
+                    <div  class="replyBox">
+                        <div v-for="replies in commentReplies">
+                            <h2>
+                                {{replies.comment}}
+                            </h2>
+                            <p>{{replies.created_at}}</p>
+                        </div>
                     </div>
                 </div>
             </div>

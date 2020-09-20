@@ -55,9 +55,15 @@
                         );
                         console.log(takeThis.commentReplies);
                     })
+                    .then(function () {
+                        takeThis.clear();
+                    })
                     .catch(function (err) {
                         console.log("ERR IN POST REPLY", err);
                     });
+            },
+            clear: function () {
+                this.replies = "";
             },
         },
     });
